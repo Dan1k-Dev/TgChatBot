@@ -2,16 +2,32 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
-//Disable the send button until connection is established.
 document.getElementById("sendButton").disabled = true;
+
+let tg = {
+    token: "6549211492:AAFtGp6j36GGBi6-0KzI2y-n-9lPWJ6yQTc", // Your bot's token that got from @BotFather
+    chat_id: "1272309767" // The user's(that you want to send a message) telegram chat id
+}
+
+function sendMessage(text) {
+    const url = `https://api.telegram.org/bot${tg.token}/sendMessage` // The url to request
+
+    const obj = {
+        chat_id: tg.chat_id, // Telegram chat id
+        text: text // The text to send
+    };
+
+    const xht = new XMLHttpRequest();
+    xht.open("POST", url, true);
+    xht.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    xht.send(JSON.stringify(obj));
+}
 
 connection.on("ReceiveMessage", function (user, message) {
     var li = document.createElement("li");
     document.getElementById("messagesList").appendChild(li);
-    // We can assign user-supplied strings to an element's textContent because it
-    // is not interpreted as markup. If you're assigning in any other way, you 
-    // should be aware of possible script injection concerns.
-    li.textContent = `${user} says ${message}`;
+    li.textContent = `${user}: ${message}`;
+    sendMessage(message);
 });
 
 connection.start().then(function () {
