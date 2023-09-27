@@ -1,26 +1,45 @@
 ﻿@page
+@using Microsoft.Data.SqlClient;
+@{
+    string connectionString = "Server=Frols\\DESKTOPSERVER;Database=TgChatAppDb;Trusted_Connection=True;TrustServerCertificate=True;";
+    SqlConnection connection = new SqlConnection(connectionString);
+
+    string sqlExpressionMsg = "SELECT TOP(1) msg FROM HistoryMsg ORDER BY time_msg DESC"; //команда на сообщение
+
+    connection.Open();
+    SqlCommand commandMsg = new SqlCommand(sqlExpressionMsg, connection); //выполняем команды
+
+    List<string> data = new List<string>();
+
+    SqlDataReader reader = commandMsg.ExecuteReader();
+    if (reader.Read())
+    {
+        data.Add(reader.GetString(0));
+    }
+    string[] arr = data.ToArray(); //записываем элемент списка (сообщение) в массив
+}
 <div class="container">
     <div class="row p-1">
-        <div class="col-1">User</div>
+        <div class="col-1">Введите имя</div>
         <div class="col-5"><input type="text" id="userInput" /></div>
     </div>
     <div class="row p-1">
-        <div class="col-1">Message</div>
+        <div class="col-1">Введите сообщение</div>
         <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
     </div>
     <div class="row p-1">
         <div class="col-6 text-end">
-            <input type="button" id="sendButton" value="Send Message" />
+            <input type="button" id="sendButton" value="Отправить" />
         </div>
     </div>
     <div class="row p-1">
         <div class="col-6">
-            <hr />
+            <hr/>
         </div>
     </div>
     <div class="row p-1">
         <div class="col-6">
-            <ul id="messagesList"></ul>
+            @ListHelper.CreateList(Html, arr)
         </div>
     </div>
 </div>

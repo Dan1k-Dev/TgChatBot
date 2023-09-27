@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Configuration;
+using System.Web;
 
 namespace TgChatBotTopYou.Pages
 {
@@ -10,11 +15,6 @@ namespace TgChatBotTopYou.Pages
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
-        }
-
-        public void OnGet()
-        {
-
         }
     }
 }
